@@ -1,0 +1,53 @@
+DESIGN AND IMPLEMENTATION:
+------->>> SERIALIZATION <<<-------
+1) I have made 3 classes which are Pair, PairList and App class.
+2) Pair class is used for generating the JSON file.
+   The Pair class is used to make a class object with name and score.
+3) Then the JSON file is made by reading the CSV file and converting it to JSON format.
+------->>> DESERIALIZATION <<<-------
+4) After making the JSON file, I read the JSON file with the help of the function readJSON.
+   This function makes the JSONArray object and parses it using list of JSONObject mapped to PairList class.
+5) According to the requirement to make a Query server while reading the JSON file, I am preprocessing the file
+   and saving it into the Trie data structure. The reason behind inserting value in the Trie data structure was
+   that we need sublinear time to search a query.
+6) While inserting the value in the Tries, I am keeping a TreeMap which maintains the top 10 candidates till that
+   index. So while searching if I reach at a node of a Trie (which is my solution) I can
+   directly give top 10 query list.
+ ------->>> SEARCH <<<-------
+7) I search for the string in the Trie while iterating over the Trie and when ever I find the solution
+   I just return the top 10 values of the node from the treeNode.
+
+Alternatives
+I have thought to use bloom filter to solve this problem because we need to basically return the word that we are matching.
+But using the Trie and TreeMap can easily solve the value.
+
+Deployment Plan
+1) I have added logs in the program so that I can monitor the running of the code.
+   I have made a file named test.log in which logs are added. If the log file takes up too much storage then we can take 2 different approaches
+   to maintain the log files. The first one would be to have a separate log file for every day. This will help in maintaining log file
+   for everyday. The second approach would be to periodically back up the log file to any cloud service to free up space from the server or machine.
+   This approach will help to decrease the space taken in the machine.
+
+2) I have maintained the log level as INFO, SEVERE and WARNING. When ever I will get the logging details as Severe, I will generate an alert
+   to be sent to the appropriate team because the code was not able to run properly and it stopped in between. It will also create a problem for the
+   end user as he/she will be unable to access the service. I will keep monitoring the log with Info level, as that keeps me updated about whether or not
+   my program is returning the expected value or not.
+
+3) As I am making Trie for the complete JSON file, so I will keep monitoring the time and space taken in the machine.
+   Once I have utilized 75% of the space(assumption), I will generate an alert request which informs the team about
+   space reaching its maximum value and in near future it can throw error. At the same time while I am adding the value to
+   the Trie, which will take O(n) time where n is the length of word. So I just need to keep chart of Trie size versus length of
+   word. Another chart I will maintain is search time in Trie with the Trie size. This will help me to understand the efficiency
+   that I could add in the future. Like if my words (search are more towards a - m I have to optimize my search on that end)
+
+4) One more graph that I will make is space taken by the Trie and top 10 results at the every node. This should be monitored
+   because this will add a lot of space complexity with larger tree. And if I image once the system has reached its
+   good amount of searches than I can reduce the top number of results because system will provide me better results. Its
+   like training the system.
+
+
+Test Plan
+1) Basically I will test the program with small input size. When I will get the results of the program then again
+   I will deploy the program in the test application and use real world test input and monitor the results. If the results are as expected
+   then I will deploy the application on one specific region, for example, Texas in USA. After successful
+   deployment to one region I can start deployment for different regions.
